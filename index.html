@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ficha de Avaliação de Dieta</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Fonte bonita do Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-main: #050816;
+      --bg-card: rgba(15, 23, 42, 0.95);
+      --bg-card-soft: rgba(15, 23, 42, 0.8);
+      --accent: #22c55e;
+      --accent-soft: rgba(34, 197, 94, 0.12);
+      --accent-strong: #4ade80;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --border-subtle: rgba(148, 163, 184, 0.3);
+      --danger: #f97373;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.9);
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-pill: 999px;
+      --transition-fast: 0.18s ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1f2937 0, #020617 50%, #000 100%);
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 1.5rem 1rem 2rem;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 960px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Fundo com blur bonitinho */
+    .background-orb {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.25), transparent 55%),
+        radial-gradient(circle at top right, rgba(52, 211, 153, 0.22), transparent 60%),
+        radial-gradient(circle at bottom, rgba(129, 140, 248, 0.2), transparent 55%);
+      filter: blur(40px);
+      opacity: 0.8;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .card {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.97), rgba(15, 23, 42, 0.9));
+      border-radius: 26px;
+      box-shadow: var(--shadow-soft);
+      padding: 1.75rem 1.4rem 1.6rem;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      backdrop-filter: blur(18px);
+    }
+
+    @media (min-width: 768px) {
+      body {
+        padding: 2.5rem 1.5rem 3rem;
+      }
+      .card {
+        padding: 2rem 2.1rem 2rem;
+      }
+    }
+
+    .header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .logo-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.8rem;
+      border-radius: var(--radius-pill);
+      background: radial-gradient(circle at top left, rgba(34, 197, 94, 0.2), rgba(15, 23, 42, 0.9));
+      border: 1px solid rgba(34, 197, 94, 0.6);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent-strong);
+      font-weight: 600;
+    }
+
+    .logo-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 12px rgba(34, 197, 94, 0.8);
+    }
+
+    .badge-pill {
+      padding: 0.35rem 0.75rem;
+      border-radius: var(--radius-pill);
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .title {
+      font-size: 1.55rem;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+    }
+
+    .title span {
+      color: var(--accent-strong);
+    }
+
+    .subtitle {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      max-width: 40rem;
+    }
+
+    .subtitle strong {
+      color: #e5e7eb;
+      font-weight: 500;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      border-radius: var(--radius-pill);
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      overflow: hidden;
+      margin-bottom: 1.4rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 26%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+      box-shadow: 0 0 16px rgba(34, 197, 94, 0.8);
+      transition: width var(--transition-fast);
+    }
+
+    .form-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    @media (min-width: 960px) {
+      .form-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+        gap: 1.25rem;
+        align-items: flex-start;
+      }
+    }
+
+    .sections-column {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .section {
+      border-radius: var(--radius-lg);
+      padding: 1rem 0.95rem 0.9rem;
+      background: radial-gradient(circle at top left, rgba(30, 64, 175, 0.7), rgba(15, 23, 42, 1));
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(148, 163, 184, 0.25), transparent 60%);
+      opacity: 0.1;
+      pointer-events: none;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+      margin-bottom: 0.65rem;
+    }
+
+    .section-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #e5e7eb;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .pill-index {
+      width: 20px;
+      height: 20px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .section-badge {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.65rem;
+      border-radius: var(--radius-pill);
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      color: var(--text-muted);
+    }
+
+    .section-body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .field-row {
+      display: flex;
+      gap: 0.55rem;
+      flex-wrap: wrap;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.22rem;
+      flex: 1 1 140px;
+    }
+
+    .label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.4rem;
+    }
+
+    .label span.main {
+      font-weight: 500;
+      color: #e5e7eb;
+    }
+
+    .label small {
+      font-size: 0.7rem;
+      opacity: 0.8;
+    }
+
+    .required-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.9);
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea,
+    select {
+      background-color: rgba(15, 23, 42, 0.9);
+      border-radius: 0.75rem;
+      border: 1px solid var(--border-subtle);
+      padding: 0.55rem 0.75rem;
+      font-size: 0.82rem;
+      color: var(--text-main);
+      outline: none;
+      width: 100%;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform 0.08s ease-out;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: rgba(148, 163, 184, 0.7);
+      font-size: 0.8rem;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--accent-strong);
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.4);
+      transform: translateY(-1px);
+      background-color: rgba(15, 23, 42, 0.97);
+    }
+
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .chips-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .chip-option {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.25rem 0.7rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      font-size: 0.75rem;
+      cursor: pointer;
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .chip-option input {
+      accent-color: var(--accent);
+    }
+
+    .helper {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .output-column {
+      margin-top: 0.9rem;
+    }
+
+    @media (min-width: 960px) {
+      .output-column {
+        margin-top: 0;
+      }
+    }
+
+    .output-card {
+      border-radius: var(--radius-lg);
+      padding: 1rem;
+      background: radial-gradient(circle at top right, rgba(34, 197, 94, 0.18), rgba(15, 23, 42, 0.98));
+      border: 1px solid rgba(34, 197, 94, 0.6);
+      position: sticky;
+      top: 1rem;
+    }
+
+    .output-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .output-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #bbf7d0;
+    }
+
+    .output-tag {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: var(--radius-pill);
+      border: 1px dashed rgba(74, 222, 128, 0.7);
+      color: #a7f3d0;
+    }
+
+    #generatedText {
+      width: 100%;
+      border-radius: 0.9rem;
+      border: 1px solid rgba(22, 163, 74, 0.6);
+      background: rgba(6, 95, 70, 0.12);
+      color: #dcfce7;
+      padding: 0.7rem 0.8rem;
+      font-size: 0.78rem;
+      line-height: 1.4;
+      resize: vertical;
+      min-height: 230px;
+      outline: none;
+    }
+
+    #generatedText::placeholder {
+      color: rgba(187, 247, 208, 0.6);
+    }
+
+    .output-footer {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      margin-top: 0.6rem;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      flex: 1 1 120px;
+      padding: 0.6rem 0.9rem;
+      border-radius: var(--radius-pill);
+      font-size: 0.83rem;
+      font-weight: 500;
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      color: #022c22;
+      box-shadow: 0 12px 35px rgba(22, 163, 74, 0.35);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      transition: transform 0.08s ease-out, box-shadow var(--transition-fast), filter var(--transition-fast);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+      box-shadow: 0 16px 40px rgba(22, 163, 74, 0.55);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+      box-shadow: 0 6px 18px rgba(22, 163, 74, 0.45);
+    }
+
+    .btn-ghost {
+      flex: 0 0 auto;
+      padding: 0.55rem 0.9rem;
+      border-radius: var(--radius-pill);
+      font-size: 0.78rem;
+      background: rgba(15, 23, 42, 0.9);
+      color: #e5e7eb;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: background var(--transition-fast), border-color var(--transition-fast), transform 0.08s ease-out;
+    }
+
+    .btn-ghost:hover {
+      background: rgba(31, 41, 55, 0.95);
+      border-color: #e5e7eb;
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost:active {
+      transform: translateY(0);
+    }
+
+    .tiny {
+      font-size: 0.7rem;
+      color: rgba(209, 250, 229, 0.85);
+    }
+
+    .status {
+      font-size: 0.73rem;
+      color: #bbf7d0;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 8px rgba(34, 197, 94, 0.7);
+    }
+
+    .error-text {
+      font-size: 0.72rem;
+      color: var(--danger);
+      margin-top: 0.15rem;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Mobile fine-tuning */
+    @media (max-width: 480px) {
+      .title {
+        font-size: 1.35rem;
+      }
+      .card {
+        border-radius: 22px;
+      }
+      .section {
+        padding: 0.85rem 0.8rem 0.8rem;
+      }
+      #generatedText {
+        min-height: 210px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="background-orb"></div>
+
+  <main class="app-shell">
+    <section class="card">
+      <header class="header">
+        <div class="header-top">
+          <div class="logo-chip">
+            <span class="logo-dot"></span>
+            Diet Coach • Intake
+          </div>
+          <div class="badge-pill">Pronto pra copiar & colar</div>
+        </div>
+        <h1 class="title">
+          Ficha para <span>montar sua dieta</span>
+        </h1>
+        <p class="subtitle">
+          Preencha rapidinho esse formulário. No final, o site gera um texto prontinho pra você
+          <strong>copiar e mandar pra sua coach</strong>.
+        </p>
+      </header>
+
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+
+      <form id="dietForm" class="form-grid">
+        <!-- COLUNA ESQUERDA: CAMPOS -->
+        <div class="sections-column">
+
+          <!-- Seção 1: Dados básicos -->
+          <section class="section">
+            <div class="section-header">
+              <h2 class="section-title">
+                <span class="pill-index">1</span> Dados básicos
+              </h2>
+              <span class="section-badge">Obrigatórios</span>
+            </div>
+            <div class="section-body">
+              <div class="field-row">
+                <div class="form-group">
+                  <label for="nome" class="label">
+                    <span class="main">Nome</span>
+                    <span class="required-dot"></span>
+                  </label>
+                  <input type="text" id="nome" name="nome" required placeholder="Seu nome completo" />
+                  <div class="error-text hidden" data-error-for="nome">Informe seu nome.</div>
+                </div>
+              </div>
+
+              <div class="field-row">
+                <div class="form-group">
+                  <label for="idade" class="label">
+                    <span class="main">Idade</span>
+                    <span class="required-dot"></span>
+                  </label>
+                  <input type="number" id="idade" name="idade" min="10" max="100"
+                         required placeholder="Ex.: 27" />
+                  <div class="error-text hidden" data-error-for="idade">Informe sua idade.</div>
+                </div>
+
+                <div class="form-group">
+                  <label for="peso" class="label">
+                    <span class="main">Peso atual (kg)</span>
+                    <span class="required-dot"></span>
+                  </label>
+                  <input type="number" id="peso" name="peso" step="0.1" min="30" max="300"
+                         required placeholder="Ex.: 63.5" />
+                  <div class="error-text hidden" data-error-for="peso">Informe seu peso.</div>
+                </div>
+
+                <div class="form-group">
+                  <label for="altura" class="label">
+                    <span class="main">Altura (cm)</span>
+                    <span class="required-dot"></span>
+                  </label>
+                  <input type="number" id="altura" name="altura" min="120" max="220"
+                         required placeholder="Ex.: 165" />
+                  <div class="error-text hidden" data-error-for="altura">Informe sua altura em cm.</div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="objetivo" class="label">
+                  <span class="main">Objetivo principal</span>
+                  <small>Mesmo que agora seja manutenção</small>
+                </label>
+                <select id="objetivo" name="objetivo">
+                  <option value="">Selecione...</option>
+                  <option value="Manutenção">Manutenção</option>
+                  <option value="Perda de gordura">Perda de gordura</option>
+                  <option value="Ganho de massa muscular">Ganho de massa muscular</option>
+                  <option value="Melhorar relação com a comida">Melhorar relação com a comida</option>
+                  <option value="Melhorar disposição e energia">Melhorar disposição e energia</option>
+                  <option value="Outro">Outro</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          <!-- Seção 2: Rotina -->
+          <section class="section">
+            <div class="section-header">
+              <h2 class="section-title">
+                <span class="pill-index">2</span> Rotina & estilo de vida
+              </h2>
+              <span class="section-badge">Dia a dia</span>
+            </div>
+            <div class="section-body">
+              <div class="form-group">
+                <label for="rotinaDia" class="label">
+                  <span class="main">O que você faz no dia a dia?</span>
+                  <small>Trabalho, estudo, home office, etc.</small>
+                </label>
+                <textarea id="rotinaDia" name="rotinaDia"
+                          placeholder="Ex.: Trabalho em escritório das 8h às 17h, estudo à noite 2x na semana..."></textarea>
+              </div>
+
+              <div class="field-row">
+                <div class="form-group">
+                  <label for="acordaDorme" class="label">
+                    <span class="main">Horários de sono</span>
+                    <small>Acorda / Dorme</small>
+                  </label>
+                  <input type="text" id="acordaDorme" name="acordaDorme"
+                         placeholder="Ex.: Acordo 6h30, durmo por volta de 23h" />
+                </div>
+
+                <div class="form-group">
+                  <label class="label">
+                    <span class="main">Como é sua rotina?</span>
+                  </label>
+                  <div class="chips-row">
+                    <label class="chip-option">
+                      <input type="radio" name="tipoRotina" value="Bem corrida" />
+                      Bem corrida
+                    </label>
+                    <label class="chip-option">
+                      <input type="radio" name="tipoRotina" value="Moderada" />
+                      Moderada
+                    </label>
+                    <label class="chip-option">
+                      <input type="radio" name="tipoRotina" value="Tranquila" />
+                      Tranquila
+                    </label>
+                    <label class="chip-option">
+                      <input type="radio" name="tipoRotina" value="Varia muito" />
+                      Varia muito
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field-row">
+                <div class="form-group">
+                  <label class="label">
+                    <span class="main">Quantas refeições consegue fazer por dia?</span>
+                  </label>
+                  <div class="chips-row">
+                    <label class="chip-option">
+                      <input type="radio" name="refeicoesDia" value="3 refeições" />
+                      3
+                    </label>
+                    <label class="chip-option">
+                      <input type="radio" name="refeicoesDia" value="4 refeições" />
+                      4
+                    </label>
+                    <label class="chip-option">
+                      <input type="radio" name="refeicoesDia" value="5 refeições" />
+                      5
+                    </label>
+                    <label class="chip-option">
+                      <input type="radio" name="refeicoesDia" value="6 ou mais refeições" />
+                      6 ou mais
+                    </label>
+                    <label class="chip-option">
+                      <input type="radio" name="refeicoesDia" value="Depende do dia" />
+                      Depende do dia
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="label">
+                    <span class="main">Cozinha ou come mais fora?</span>
+                  </label>
+                  <div class="chips-row">
+                    <label class="chip-option">
+                      <input type="radio" name="cozinhaFora" value="Cozinho a maior parte das refeições" />
+                      Cozinho
+                    </label>
+                    <label class="chip-option">
+                      <input type="radio" name="cozinhaFora" value="Como mais fora" />
+                      Como fora
+                    </label>
+                    <label class="chip-option">
+                      <input type="radio" name="cozinhaFora" value="Misturo as duas coisas" />
+                      Misturo
+                    </label>
+                    <label class="chip-option">
+                      <input type="radio" name="cozinhaFora" value="Depende da semana" />
+                      Depende
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Seção 3: Alimentação -->
+          <section class="section">
+            <div class="section-header">
+              <h2 class="section-title">
+                <span class="pill-index">3</span> Alimentação atual
+              </h2>
+              <span class="section-badge">Bem importante</span>
+            </div>
+            <div class="section-body">
+              <div class="form-group">
+                <label for="diaTipico" class="label">
+                  <span class="main">Como foi um dia típico de alimentação?</span>
+                  <small>De preferência dos últimos dias</small>
+                </label>
+                <textarea id="diaTipico" name="diaTipico"
+                          placeholder="Café da manhã: ...
+Lanche: ...
+Almoço: ...
+Lanche da tarde: ...
+Jantar: ...
+Ceia: ..."></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="naoLarga" class="label">
+                  <span class="main">Quais alimentos você não larga de jeito nenhum?</span>
+                  <small>Pão, café, chocolate, arroz, frutas...</small>
+                </label>
+                <textarea id="naoLarga" name="naoLarga"
+                          placeholder="Liste aqui os alimentos que você realmente gosta e não quer tirar."></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="naoGosta" class="label">
+                  <span class="main">Quais alimentos você não gosta / não come?</span>
+                </label>
+                <textarea id="naoGosta" name="naoGosta"
+                          placeholder="Ex.: Não gosto de ovo frito, não como frutos do mar, não gosto de feijão..."></textarea>
+              </div>
+
+              <div class="field-row">
+                <div class="form-group">
+                  <label for="exagera" class="label">
+                    <span class="main">Tende a exagerar em algum alimento?</span>
+                    <small>Doces, pão, fast food...</small>
+                  </label>
+                  <textarea id="exagera" name="exagera"
+                            placeholder="Se tiver algo que você costuma exagerar, pode contar aqui."></textarea>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="label">
+                  <span class="main">Consumo de bebidas</span>
+                  <small>Marque o que se encaixa</small>
+                </label>
+                <div class="chips-row">
+                  <label class="chip-option">
+                    <input type="checkbox" name="bebidas" value="Café" /> Café
+                  </label>
+                  <label class="chip-option">
+                    <input type="checkbox" name="bebidas" value="Chá" /> Chá
+                  </label>
+                  <label class="chip-option">
+                    <input type="checkbox" name="bebidas" value="Refrigerante" /> Refrigerante
+                  </label>
+                  <label class="chip-option">
+                    <input type="checkbox" name="bebidas" value="Suco" /> Suco
+                  </label>
+                  <label class="chip-option">
+                    <input type="checkbox" name="bebidas" value="Álcool" /> Bebida alcoólica
+                  </label>
+                  <label class="chip-option">
+                    <input type="checkbox" name="bebidas" value="Pouca água" /> Bebo pouca água
+                  </label>
+                  <label class="chip-option">
+                    <input type="checkbox" name="bebidas" value="Muita água" /> Bebo bastante água
+                  </label>
+                  <label class="chip-option">
+                    <input type="checkbox" name="bebidas" value="Energético" /> Energético
+                  </label>
+                </div>
+                <input type="text" id="bebidasObs" name="bebidasObs"
+                       placeholder="Detalhes de consumo (frequência, marca, etc.) — opcional" />
+              </div>
+            </div>
+          </section>
+
+          <!-- Seção 4: Saúde -->
+          <section class="section">
+            <div class="section-header">
+              <h2 class="section-title">
+                <span class="pill-index">4</span> Saúde
+              </h2>
+              <span class="section-badge">Confidencial</span>
+            </div>
+            <div class="section-body">
+              <div class="form-group">
+                <label for="saude" class="label">
+                  <span class="main">Algum problema de saúde diagnosticado?</span>
+                  <small>Ex.: tireoide, resistência à insulina...</small>
+                </label>
+                <textarea id="saude" name="saude"
+                          placeholder="Se não tiver nada, pode escrever: 'Nada que eu saiba'"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="medicamentos" class="label">
+                  <span class="main">Usa algum medicamento regularmente?</span>
+                </label>
+                <textarea id="medicamentos" name="medicamentos"
+                          placeholder="Nome, dose e horário aproximado. Se não usar, pode escrever: 'Não uso'."></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="alergias" class="label">
+                  <span class="main">Alergias ou intolerâncias alimentares</span>
+                </label>
+                <textarea id="alergias" name="alergias"
+                          placeholder="Ex.: lactose, glúten, camarão, eventos de gastrite, refluxo..."></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="exames" class="label">
+                  <span class="main">Últimos exames de sangue (se souber)</span>
+                  <small>Resumo rápido</small>
+                </label>
+                <textarea id="exames" name="exames"
+                          placeholder="Colesterol, vitamina D, ferro, etc. Pode resumir ou dizer que não fez recentemente."></textarea>
+              </div>
+            </div>
+          </section>
+
+          <!-- Seção 5: Treino -->
+          <section class="section">
+            <div class="section-header">
+              <h2 class="section-title">
+                <span class="pill-index">5</span> Exercícios & treino
+              </h2>
+              <span class="section-badge">Opcional mas ajuda</span>
+            </div>
+            <div class="section-body">
+              <div class="field-row">
+                <div class="form-group">
+                  <label class="label">
+                    <span class="main">Você treina atualmente?</span>
+                  </label>
+                  <div class="chips-row">
+                    <label class="chip-option">
+                      <input type="radio" name="treina" value="Sim" /> Sim
+                    </label>
+                    <label class="chip-option">
+                      <input type="radio" name="treina" value="Não" /> Não
+                    </label>
+                    <label class="chip-option">
+                      <input type="radio" name="treina" value="Às vezes" /> Às vezes
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="tipoTreino" class="label">
+                    <span class="main">Tipo de treino</span>
+                    <small>Se treinar</small>
+                  </label>
+                  <input type="text" id="tipoTreino" name="tipoTreino"
+                         placeholder="Musculação, corrida, dança, funcional, esportes..." />
+                </div>
+              </div>
+
+              <div class="field-row">
+                <div class="form-group">
+                  <label class="label">
+                    <span class="main">Frequência semanal</span>
+                  </label>
+                  <div class="chips-row">
+                    <label class="chip-option">
+                      <input type="radio" name="freqTreino" value="1–2x na semana" /> 1–2x
+                    </label>
+                    <label class="chip-option">
+                      <input type="radio" name="freqTreino" value="3–4x na semana" /> 3–4x
+                    </label>
+                    <label class="chip-option">
+                      <input type="radio" name="freqTreino" value="5–6x na semana" /> 5–6x
+                    </label>
+                    <label class="chip-option">
+                      <input type="radio" name="freqTreino" value="Todos os dias" /> Todos os dias
+                    </label>
+                    <label class="chip-option">
+                      <input type="radio" name="freqTreino" value="Não treino" /> Não treino
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="label">
+                    <span class="main">Quer sugestão de pré/pós-treino?</span>
+                  </label>
+                  <div class="chips-row">
+                    <label class="chip-option">
+                      <input type="radio" name="prePos" value="Sim" /> Sim
+                    </label>
+                    <label class="chip-option">
+                      <input type="radio" name="prePos" value="Não" /> Não
+                    </label>
+                    <label class="chip-option">
+                      <input type="radio" name="prePos" value="Tanto faz" /> Tanto faz
+                    </label>
+                  </div>
+                  <p class="helper">Isso ajuda a encaixar melhor sua dieta com o horário de treino.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- COLUNA DIREITA: TEXTO GERADO -->
+        <aside class="output-column">
+          <div class="output-card">
+            <div class="output-header">
+              <h2 class="output-title">Texto gerado</h2>
+              <span class="output-tag">Copie e me envie</span>
+            </div>
+
+            <textarea id="generatedText" readonly
+                      placeholder="Preencha os campos ao lado e clique em &quot;Gerar texto&quot;. O resumo aparece aqui para você copiar."></textarea>
+
+            <div class="output-footer">
+              <div class="btn-row">
+                <button type="submit" class="btn-primary">
+                  <span>✨ Gerar texto</span>
+                </button>
+                <button type="button" class="btn-ghost" id="copyBtn">
+                  📋 Copiar
+                </button>
+              </div>
+              <div class="status">
+                <span class="status-dot"></span>
+                <span id="statusText">Preencha os dados e gere seu resumo.</span>
+              </div>
+              <p class="tiny">
+                Dica: depois de gerar, você pode editar o texto aqui mesmo antes de copiar, se quiser ajustar alguma frase.
+              </p>
+            </div>
+          </div>
+        </aside>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    const form = document.getElementById('dietForm');
+    const progressFill = document.getElementById('progressFill');
+    const generatedText = document.getElementById('generatedText');
+    const statusText = document.getElementById('statusText');
+    const copyBtn = document.getElementById('copyBtn');
+
+    const requiredFields = ['nome', 'idade', 'peso', 'altura'];
+
+    function getRadioValue(name) {
+      const checked = document.querySelector(`input[name="${name}"]:checked`);
+      return checked ? checked.value : '';
+    }
+
+    function getCheckboxValues(name) {
+      return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`))
+        .map((el) => el.value);
+    }
+
+    function validateForm() {
+      let valid = true;
+
+      requiredFields.forEach((id) => {
+        const field = document.getElementById(id);
+        const error = document.querySelector(`[data-error-for="${id}"]`);
+        if (!field) return;
+
+        if (!field.value.trim()) {
+          valid = false;
+          if (error) error.classList.remove('hidden');
+        } else {
+          if (error) error.classList.add('hidden');
+        }
+      });
+
+      return valid;
+    }
+
+    function updateProgress() {
+      let filled = 0;
+      requiredFields.forEach((id) => {
+        const field = document.getElementById(id);
+        if (field && field.value.trim()) filled++;
+      });
+      const base = 26; // porcentagem mínima só pra ficar bonito
+      const extra = (filled / requiredFields.length) * 60;
+      const total = Math.min(base + extra, 90);
+      progressFill.style.width = total + '%';
+    }
+
+    requiredFields.forEach((id) => {
+      const field = document.getElementById(id);
+      if (field) {
+        field.addEventListener('input', updateProgress);
+      }
+    });
+
+    function buildSummary() {
+      const nome = document.getElementById('nome').value.trim();
+      const idade = document.getElementById('idade').value.trim();
+      const peso = document.getElementById('peso').value.trim();
+      const altura = document.getElementById('altura').value.trim();
+      const objetivo = document.getElementById('objetivo').value.trim();
+
+      const rotinaDia = document.getElementById('rotinaDia').value.trim();
+      const acordaDorme = document.getElementById('acordaDorme').value.trim();
+      const tipoRotina = getRadioValue('tipoRotina') || '';
+      const refeicoesDia = getRadioValue('refeicoesDia') || '';
+      const cozinhaFora = getRadioValue('cozinhaFora') || '';
+
+      const diaTipico = document.getElementById('diaTipico').value.trim();
+      const naoLarga = document.getElementById('naoLarga').value.trim();
+      const naoGosta = document.getElementById('naoGosta').value.trim();
+      const exagera = document.getElementById('exagera').value.trim();
+      const bebidas = getCheckboxValues('bebidas');
+      const bebidasObs = document.getElementById('bebidasObs').value.trim();
+
+      const saude = document.getElementById('saude').value.trim();
+      const medicamentos = document.getElementById('medicamentos').value.trim();
+      const alergias = document.getElementById('alergias').value.trim();
+      const exames = document.getElementById('exames').value.trim();
+
+      const treina = getRadioValue('treina') || '';
+      const tipoTreino = document.getElementById('tipoTreino').value.trim();
+      const freqTreino = getRadioValue('freqTreino') || '';
+      const prePos = getRadioValue('prePos') || '';
+
+      const linhas = [];
+
+      linhas.push(`Nome: ${nome}`);
+      if (idade) linhas.push(`Idade: ${idade} anos`);
+      if (peso) linhas.push(`Peso atual: ${peso} kg`);
+      if (altura) linhas.push(`Altura: ${altura} cm`);
+      if (objetivo) linhas.push(`Objetivo principal: ${objetivo}`);
+
+      linhas.push('');
+      linhas.push('--- ROTINA E ESTILO DE VIDA ---');
+      if (rotinaDia) linhas.push(`Dia a dia / trabalho/estudo: ${rotinaDia}`);
+      if (acordaDorme) linhas.push(`Horários de sono (acordo / durmo): ${acordaDorme}`);
+      if (tipoRotina) linhas.push(`Percepção da rotina: ${tipoRotina}`);
+      if (refeicoesDia) linhas.push(`Quantas refeições consigo fazer: ${refeicoesDia}`);
+      if (cozinhaFora) linhas.push(`Cozinho ou como fora: ${cozinhaFora}`);
+
+      linhas.push('');
+      linhas.push('--- ALIMENTAÇÃO ATUAL ---');
+      if (diaTipico) {
+        linhas.push('Meu dia típico de alimentação (últimos dias):');
+        linhas.push(diaTipico);
+      }
+      if (naoLarga) linhas.push(`Alimentos que não quero tirar (gosto muito / não largo): ${naoLarga}`);
+      if (naoGosta) linhas.push(`Alimentos que não gosto / não como: ${naoGosta}`);
+      if (exagera) linhas.push(`Alimentos em que costumo exagerar: ${exagera}`);
+      if (bebidas.length || bebidasObs) {
+        linhas.push(`Consumo de bebidas: ${bebidas.join(', ') || 'não informado'}`);
+        if (bebidasObs) linhas.push(`Detalhes sobre bebidas: ${bebidasObs}`);
+      }
+
+      linhas.push('');
+      linhas.push('--- SAÚDE ---');
+      if (saude) linhas.push(`Condições de saúde / histórico: ${saude}`);
+      if (medicamentos) linhas.push(`Medicamentos de uso contínuo ou frequente: ${medicamentos}`);
+      if (alergias) linhas.push(`Alergias / intolerâncias: ${alergias}`);
+      if (exames) linhas.push(`Resumo de exames recentes (se lembrar): ${exames}`);
+
+      linhas.push('');
+      linhas.push('--- EXERCÍCIOS / TREINO ---');
+      if (treina) linhas.push(`Treino atualmente: ${treina}`);
+      if (tipoTreino) linhas.push(`Tipo de treino: ${tipoTreino}`);
+      if (freqTreino) linhas.push(`Frequência semanal de treino: ${freqTreino}`);
+      if (prePos) linhas.push(`Quero sugestões de pré/pós-treino? ${prePos}`);
+
+      linhas.push('');
+      linhas.push('--- OBS GERAIS ---');
+      linhas.push('Se faltar alguma coisa importante, posso te mandar depois!');
+
+      return linhas.join('\n');
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const ok = validateForm();
+      if (!ok) {
+        statusText.textContent = 'Preencha os campos obrigatórios marcados com o pontinho verde.';
+        generatedText.placeholder = 'Existem campos obrigatórios sem preencher. Corrija e clique em "Gerar texto" de novo.';
+        return;
+      }
+
+      const resumo = buildSummary();
+      generatedText.value = resumo;
+      statusText.textContent = 'Resumo gerado! Agora é só copiar e me enviar. 👇';
+
+      // Scroll suave até o texto gerado no mobile
+      generatedText.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    copyBtn.addEventListener('click', async () => {
+      const text = generatedText.value.trim();
+      if (!text) {
+        statusText.textContent = 'Nada para copiar ainda. Gere o texto primeiro. 😉';
+        return;
+      }
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          // Fallback
+          generatedText.select();
+          document.execCommand('copy');
+        }
+        statusText.textContent = 'Texto copiado! Cole onde quiser (WhatsApp, Insta, e-mail...). ✅';
+      } catch (err) {
+        statusText.textContent = 'Não consegui copiar automaticamente, mas você pode selecionar o texto manualmente.';
+      }
+    });
+  </script>
+</body>
+</html>
